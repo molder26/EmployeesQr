@@ -71,6 +71,11 @@ require "./config.php";
     </div>
 </div>
 
+<div id="qr" style="display:none">
+    <img>
+    <button type="button" name="btnVolver" id="btnVolver" class="btn btn-primary btn-md btn-block" onclick="location.reload();">Volver</button>
+</div>
+
 </body>
 <script>
     function checkSelects() {
@@ -86,10 +91,15 @@ require "./config.php";
         document.getElementById('recuadro').style.display = "none";
         if (condicion === 'entrada'){
             console.log('entra');
+
         } else {
             console.log('sale');
             
         }
+        document.getElementById('qr').style.display = "";
+    }
+
+    function volver() {
         
     }
 </script>
