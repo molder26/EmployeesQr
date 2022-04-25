@@ -1,13 +1,27 @@
 <?php
 
 require_once("../phpqrcode/qrlib.php");
+require "../config.php";
 
-if (array_key_exists('dni', $_POST) && $_POST['dni'] !== '' && array_key_exists('nombre', $_POST) && $_POST['nombre'] !== '' && array_key_exists('condicion', $_POST) && $_POST['condicion'] !== '' && array_key_exists('url', $_POST) && $_POST['url'] !== '') {
-
-    $nombre = $_POST['nombre'];
-    $dni = $_POST['dni'];
+if (array_key_exists('id', $_POST) && $_POST['id'] !== '' && array_key_exists('condicion', $_POST) && $_POST['condicion'] !== '' && array_key_exists('url', $_POST) && $_POST['url'] !== '') {
+    $id = $_POST['id'];
     $condicion = $_POST['condicion'];
     $url = $_POST['url'];
+
+    if ($mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)) {
+        if ($stmt = $mysqli->prepare("SELECT dni, nombre FROM empleados WHERE id = ?")) {
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $stmt->bind_result($dni, $nombre);
+            if (!$stmt->fetch()) {
+                header('Content-Type: application/json');
+                echo json_encode("El empleado no se pudo encontrar");
+                exit();
+            } else {
+                $stmt->close();
+            }
+        }
+    }
 
     $fecha = date('Y-m-d');
     $md5 = md5($dni . $condicion . $fecha);

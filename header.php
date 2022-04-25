@@ -22,12 +22,6 @@
           <a class="nav-link <?php echo $inicio; ?>" aria-current="page" href="./index.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <?php echo $empleados; ?>" href="./empleados.php">Empleados</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Marcar</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="#">Informe</a>
         </li>
       </ul>

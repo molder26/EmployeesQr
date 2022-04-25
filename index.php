@@ -71,8 +71,7 @@ if ($mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
                 </div> -->
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <div class="btn-group me-2" role="group" aria-label="First group">
-                        <!-- <button type="button" class="btn <?php echo $btnClass; ?> btn-md"><i class="fas fa-sign-out-alt"></i></button> -->
-                        <button type="button" class="btn <?php echo $btnClass; ?> btn-md"><i class="<?php echo $iconMarcacion; ?>"></i></button>
+                        <button type="button" class="btn <?php echo $btnClass; ?> btn-md" onclick=showQr(<?php echo $row['estado'] . "," . $row['id'] ?>)><i class="<?php echo $iconMarcacion; ?>"></i></button>
                     </div>
                     <!-- <button type="button" class="btn btn-secondary btn-md">Middle</button> -->
                 </div>
@@ -94,6 +93,27 @@ if ($mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
     <div>
         <button type="button" name="guardar_empleado" id="guardar_empleado" class="btn btn-success" btn-lg btn-block" onclick="guardar_empleado()">Guardar</button>
         <button type="button" name="cancelar_empleado" id="cancelar_empleado" class="btn btn-danger" btn-lg btn-block" onclick="cancelar_empleado()">Cancelar</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- Small modal -->
+<div id="QrModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header">
+            <center><h4 class="modal-title" id="mySmallModalLabel">Escanear este QR</h4></center>
+            
+        </div>
+        <div class="modal-body">
+            <center><img src="" alt="" width="251" height="297" id="imageqr"></center>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="location.reload();">Cerrar</button>
+        </div>
+        </div>
+    </div>
     </div>
 </div>
 
@@ -133,7 +153,7 @@ if ($mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
                         title: 'Exito!',
                         text: 'Empleado guardado con exito',
                         icon: 'success',
-                        confirmButtonColor: '#157347'
+                        confirmButtonColor: '#0d6efd'
                     }).then(function(isConfirm) {
                         location.reload();
                     });
@@ -142,11 +162,42 @@ if ($mysqli = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE)
                         title: 'Error!',
                         text: data,
                         icon: 'error',
-                        confirmButtonColor: '#dc3545'
+                        confirmButtonColor: '#0d6efd'
                     });
                 }
         });
-        
+    }
+
+    function showQr(estado, id) {
+        let url = window.location.protocol + "//" + window.location.host;
+        condicion = estado === 0 ? 'entrada' : 'salida';
+
+        $.post("./api/qr.php", {
+            id:id,
+            condicion:condicion,
+            url:url
+            },function(data){
+                if(data == "Qr generado correctamente"){
+                    let imagen = "./api/qr.png";
+					refreshImage("imageqr", imagen);
+                    $("#QrModal").modal("show");
+                }else{
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data,
+                        icon: 'error',
+                        confirmButtonColor: '#0d6efd'
+                    });
+                }
+        });
+    }
+
+    function refreshImage(imgElement, imgURL){    
+        // create a new timestamp 
+        let timestamp = new Date().getTime();  
+        let el = document.getElementById(imgElement);  
+        let queryString = "?t=" + timestamp;    
+        el.src = imgURL + queryString;    
     }
 </script>
 </html>
