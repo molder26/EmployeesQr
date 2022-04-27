@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <title>Control de asistencias</title>
 </head>
-<body>
+<body <?php echo $password; ?>>
 <nav class="navbar navbar-expand-md navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="./index.php">Control de Asistencias</a>

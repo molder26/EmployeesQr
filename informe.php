@@ -2,6 +2,8 @@
 $informe = 'active';
 
 // require "./config.php";
+$password = 'onload="getPassword()"';
+
 require "./header.php";
 
 $fecha = date('Y-m-d');
@@ -63,7 +65,56 @@ $fecha = date('Y-m-d');
             desde:desde,
             hasta:hasta
             },function(data){
-                console.table(data);
+                window.location.href = './api/informe.xlsx';
+        });
+    }
+
+    function getPassword(){
+        const inputValue = 345.67
+        const inputStep = 0.01
+        var value;
+
+        Swal.fire({
+        title: 'input[number] + input[range]',
+        showCancelButton: true,
+        html: `
+            <input
+            type="number"
+            value="${inputValue}"
+            step="${inputStep}"
+            class="swal2-input"
+            id="range-value">`,
+        input: 'range',
+        inputValue,
+        inputAttributes: {
+            min: 0,
+            max: 1000,
+            step: inputStep
+        },
+        didOpen: () => {
+            const inputRange = Swal.getInput()
+            const inputNumber = Swal.getHtmlContainer().querySelector('#range-value')
+
+            // remove default output
+            inputRange.nextElementSibling.style.display = 'none'
+            inputRange.style.width = '100%'
+
+            // sync input[type=number] with input[type=range]
+            inputRange.addEventListener('input', () => {
+            inputNumber.value = inputRange.value;
+            value = inputNumber.value;
+            })
+
+            // sync input[type=range] with input[type=number]
+            inputNumber.addEventListener('change', () => {
+            inputRange.value = inputNumber.value;
+            value = inputNumber.value;
+            })
+        }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (value !== '773.15') window.location.href = './index.php';
+            } else window.location.href = './index.php';
         });
     }
 </script>
