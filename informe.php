@@ -65,7 +65,9 @@ $fecha = date('Y-m-d');
             desde:desde,
             hasta:hasta
             },function(data){
-                window.location.href = './api/informe.xlsx';
+                let timestamp = new Date().getTime();
+                let queryString = "?t=" + timestamp;
+                window.location.href = './api/informe.xlsx' + queryString;
         });
     }
 
@@ -75,7 +77,7 @@ $fecha = date('Y-m-d');
         var value;
 
         Swal.fire({
-        title: 'input[number] + input[range]',
+        title: 'Parametros de rango',
         showCancelButton: true,
         html: `
             <input
